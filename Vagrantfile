@@ -4,14 +4,14 @@
 MACHINES = {
   :"kernel-update" => {
     :box_name => "generic/centos9s",
-    :cpus => 16,
+    :cpus => 32,
     :memory => 8192,
   }
 }
 
 Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|
-    config.vm.synced_folder ".", "/vagrant"
+    config.vm.synced_folder ".", "/vagrant", type: "virtualbox", automount: true
     config.vm.define boxname do |box|
       box.vm.box = boxconfig[:box_name]
       box.vm.host_name = boxname.to_s
