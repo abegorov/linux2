@@ -32,6 +32,7 @@ wget -O - "https://git.kernel.org/torvalds/t/linux-${LINUX_VER}.tar.gz" \
 
 echo Build kernel RPM packages:
 make olddefconfig
+sed 's/^\(CONFIG_SYSTEM_TRUSTED_KEYS=\).*/\1/' -i .config
 make -j 32
 make binrpm-pkg
 
