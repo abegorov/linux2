@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
         v.memory = boxconfig[:memory]
         v.cpus = boxconfig[:cpus]
       end
-      box.vm.provision "shell", path: "provision.sh"
+      box.vm.provision "shell", path: "provision.sh", privileged: false
     end
   end
 end
