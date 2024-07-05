@@ -6,11 +6,6 @@ set -x  # Print commands and their arguments as they are executed.
 LINUX_VER="6.10-rc6"
 VBOX_VER="7.0.18"
 
-echo 'Changing GRUB_TIMEOUT=1 to GRUB_TIMEOUT=10':
-sudo sed 's/^\(GRUB_TIMEOUT=\).*/\110/' -i /etc/default/grub
-sudo grub2-editenv - set menu_auto_hide=0
-sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-
 echo 'Install latest kernel from elrepo':
 sudo dnf install -y \
   "https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm"
@@ -46,6 +41,15 @@ rm "/tmp/VBoxGuestAdditions.iso"
 
 echo 'Build VirtualBox kernel modules for all kernels:'
 sudo rcvboxadd quicksetup all
+
+echo 'Changing GRUB_TIMEOUT=1 to GRUB_TIMEOUT=10':
+sudo sed 's/^\(GRUB_TIMEOUT=\).*/\110/' -i /etc/default/grub
+sudo sed 's/^\(GRUB_ENABLE_BLSCFG=\).*/\1false/' -i /etc/default/grub
+sudo grub2-editenv - set menu_auto_hide=0
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+echo 'Removing _netdev from vagrant mount:'
+sudo sed '/^vagrant / s/,_netdev//' -i /etc/fstab
 
 echo 'Rebooting:'
 sudo reboot
